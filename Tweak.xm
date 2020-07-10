@@ -1,6 +1,6 @@
 
 @interface UICalloutBar : UIView
-@property (nonatomic,readonly) bool isDisplayingVertically; 
+@property (nonatomic,readonly) bool isDisplayingVertically;
 @property (nonatomic, retain) NSArray *extraItems;
 @property (nonatomic, retain) UIMenuItem *rektItem;
 @end
@@ -86,13 +86,18 @@ static NSDictionary *pirateTalk = @{
 NSString *piratefy (NSString *text) {
     NSString *temp = [text copy];
     temp = [temp lowercaseString];
-    
+    NSArray *textNoArray = [temp componentsSeparatedByString:@" "];
+    NSMutableArray *textArray = [textNoArray mutableCopy];
+
     if (pirateTalk) {
         for (NSString *key in pirateTalk) {
-            temp = [temp stringByReplacingOccurrencesOfString:key withString:pirateTalk[key]];
+            if ([textArray containsObject:key]) {
+              NSUInteger objectIndex = [textArray indexOfObject:key];
+              [textArray replaceObjectAtIndex:objectIndex withObject:pirateTalk[key]];
+            }
         }
     }
-    NSString *lowerCase = [@" " stringByAppendingString:temp];
+    NSString *lowerCase = [textArray componentsJoinedByString:@" "];
     lowerCase = [lowerCase lowercaseString];
     return lowerCase;
 }
@@ -181,17 +186,17 @@ NSString *lmgtfy (NSString *texttochange) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         NSString *selectedText = [[UIPasteboard generalPasteboard].string copy];
         if (selectedText) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *clapaction = [UIAlertAction actionWithTitle:@"👏" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [[UIPasteboard generalPasteboard] setString:clap(selectedText)];
-                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil]; 
+                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
 
               }];
             [alertController addAction:clapaction];
 
             UIAlertAction *googleAction = [UIAlertAction actionWithTitle:@"Let Me Google That For You" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [[UIPasteboard generalPasteboard] setString:lmgtfy(selectedText)];
-                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil]; 
+                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
 
               }];
               [alertController addAction:googleAction];
