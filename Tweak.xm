@@ -134,6 +134,23 @@ NSString *clap (NSString *texttochange) {
     return finalText;
 }
 
+NSString *spaceify (NSString *texttochange) {
+    NSString *temp = [texttochange copy];
+
+    //float randonmess = 0.5;
+    NSMutableString *finalText = [@"" mutableCopy];
+    for (int i=0; i<temp.length; i++) {
+        NSString *charSelected = [temp substringWithRange:NSMakeRange(i, 1)];
+        if ([charSelected isEqualToString:@" "]) {
+            charSelected = @" ";
+        } else {
+          charSelected = [NSString stringWithFormat:@"%@ ",charSelected];
+        }
+        [finalText appendString:charSelected];
+    }
+    return finalText;
+}
+
 NSString *lmgtfy (NSString *texttochange) {
     NSString *fix = [texttochange stringByReplacingOccurrencesOfString:@" " withString:@"+"];
     return [NSString stringWithFormat:@"http://www.lmgtfy.com/?iie=1&q=%@", fix];
@@ -186,7 +203,7 @@ NSString *lmgtfy (NSString *texttochange) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         NSString *selectedText = [[UIPasteboard generalPasteboard].string copy];
         if (selectedText) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             UIAlertAction *clapaction = [UIAlertAction actionWithTitle:@"👏" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [[UIPasteboard generalPasteboard] setString:clap(selectedText)];
                 [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
@@ -212,6 +229,12 @@ NSString *lmgtfy (NSString *texttochange) {
                 [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
               }];
               [alertController addAction:piratefyAction];
+
+              UIAlertAction *spaceAction = [UIAlertAction actionWithTitle:@"S p a c e" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIPasteboard generalPasteboard] setString:spaceify(selectedText)];
+                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+              }];
+              [alertController addAction:spaceAction];
 
               UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
               }];

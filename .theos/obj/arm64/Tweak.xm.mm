@@ -135,6 +135,23 @@ NSString *clap (NSString *texttochange) {
     return finalText;
 }
 
+NSString *spaceify (NSString *texttochange) {
+    NSString *temp = [texttochange copy];
+
+    
+    NSMutableString *finalText = [@"" mutableCopy];
+    for (int i=0; i<temp.length; i++) {
+        NSString *charSelected = [temp substringWithRange:NSMakeRange(i, 1)];
+        if ([charSelected isEqualToString:@" "]) {
+            charSelected = @" ";
+        } else {
+          charSelected = [NSString stringWithFormat:@"%@ ",charSelected];
+        }
+        [finalText appendString:charSelected];
+    }
+    return finalText;
+}
+
 NSString *lmgtfy (NSString *texttochange) {
     NSString *fix = [texttochange stringByReplacingOccurrencesOfString:@" " withString:@"+"];
     return [NSString stringWithFormat:@"http://www.lmgtfy.com/?iie=1&q=%@", fix];
@@ -164,7 +181,7 @@ NSString *lmgtfy (NSString *texttochange) {
 @class UICalloutBar; @class UIResponder; 
 
 
-#line 142 "Tweak.xm"
+#line 159 "Tweak.xm"
 static UICalloutBar* (*_logos_orig$SelectRekt$UICalloutBar$initWithFrame$)(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static UICalloutBar* _logos_method$SelectRekt$UICalloutBar$initWithFrame$(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static void (*_logos_orig$SelectRekt$UICalloutBar$updateAvailableButtons)(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UICalloutBar$updateAvailableButtons(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_NORMAL UIResponder* _LOGOS_SELF_CONST, SEL, UIResponder *); 
 
 __attribute__((used)) static UIMenuItem * _logos_method$SelectRekt$UICalloutBar$rektItem(UICalloutBar * __unused self, SEL __unused _cmd) { return (UIMenuItem *)objc_getAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem); }; __attribute__((used)) static void _logos_method$SelectRekt$UICalloutBar$setRektItem(UICalloutBar * __unused self, SEL __unused _cmd, UIMenuItem * rawValue) { objc_setAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem, rawValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC); }
@@ -212,7 +229,7 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         NSString *selectedText = [[UIPasteboard generalPasteboard].string copy];
         if (selectedText) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             UIAlertAction *clapaction = [UIAlertAction actionWithTitle:@"👏" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [[UIPasteboard generalPasteboard] setString:clap(selectedText)];
                 [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
@@ -239,6 +256,12 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
               }];
               [alertController addAction:piratefyAction];
 
+              UIAlertAction *spaceAction = [UIAlertAction actionWithTitle:@"S p a c e" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIPasteboard generalPasteboard] setString:spaceify(selectedText)];
+                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+              }];
+              [alertController addAction:spaceAction];
+
               UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
               }];
               [alertController addAction:cancelAction];
@@ -259,7 +282,7 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_28a06894(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_a1a39fbd(int __unused argc, char __unused **argv, char __unused **envp) {
     
     
     bool shouldLoad = NO;
