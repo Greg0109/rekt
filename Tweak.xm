@@ -11,6 +11,8 @@
 
 static NSString *mode = nil;
 
+NSString *emojichosen = nil;
+
 static NSDictionary *pirateTalk = @{
     @"hello": @"ahoy",
     @"hi": @"arrr",
@@ -127,7 +129,7 @@ NSString *clap (NSString *texttochange) {
     for (int i=0; i<temp.length; i++) {
         NSString *charSelected = [temp substringWithRange:NSMakeRange(i, 1)];
         if ([charSelected isEqualToString:@" "]) {
-            charSelected = @"👏";
+            charSelected = emojichosen;
         }
         [finalText appendString:charSelected];
     }
@@ -204,9 +206,20 @@ NSString *lmgtfy (NSString *texttochange) {
         NSString *selectedText = [[UIPasteboard generalPasteboard].string copy];
         if (selectedText) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-            UIAlertAction *clapaction = [UIAlertAction actionWithTitle:@"👏" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [[UIPasteboard generalPasteboard] setString:clap(selectedText)];
-                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+            UIAlertAction *clapaction = [UIAlertAction actionWithTitle:@"Choose Emoji" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Choose Emoji" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                  textField.text = @"👏";
+                }];
+                UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                  emojichosen = [[alertController textFields][0] text];
+                  [[UIPasteboard generalPasteboard] setString:clap(selectedText)];
+                  [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+                }];
+                [alertController addAction:confirmAction];
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}];
+                [alertController addAction:cancelAction];
+                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:^{}];
 
               }];
             [alertController addAction:clapaction];

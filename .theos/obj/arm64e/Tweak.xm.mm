@@ -12,6 +12,8 @@
 
 static NSString *mode = nil;
 
+NSString *emojichosen = nil;
+
 static NSDictionary *pirateTalk = @{
     @"hello": @"ahoy",
     @"hi": @"arrr",
@@ -128,7 +130,7 @@ NSString *clap (NSString *texttochange) {
     for (int i=0; i<temp.length; i++) {
         NSString *charSelected = [temp substringWithRange:NSMakeRange(i, 1)];
         if ([charSelected isEqualToString:@" "]) {
-            charSelected = @"👏";
+            charSelected = emojichosen;
         }
         [finalText appendString:charSelected];
     }
@@ -178,10 +180,10 @@ NSString *lmgtfy (NSString *texttochange) {
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class UICalloutBar; @class UIResponder; 
+@class UIResponder; @class UICalloutBar; 
 
 
-#line 159 "Tweak.xm"
+#line 161 "Tweak.xm"
 static UICalloutBar* (*_logos_orig$SelectRekt$UICalloutBar$initWithFrame$)(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static UICalloutBar* _logos_method$SelectRekt$UICalloutBar$initWithFrame$(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static void (*_logos_orig$SelectRekt$UICalloutBar$updateAvailableButtons)(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UICalloutBar$updateAvailableButtons(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_NORMAL UIResponder* _LOGOS_SELF_CONST, SEL, UIResponder *); 
 
 __attribute__((used)) static UIMenuItem * _logos_method$SelectRekt$UICalloutBar$rektItem(UICalloutBar * __unused self, SEL __unused _cmd) { return (UIMenuItem *)objc_getAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem); }; __attribute__((used)) static void _logos_method$SelectRekt$UICalloutBar$setRektItem(UICalloutBar * __unused self, SEL __unused _cmd, UIMenuItem * rawValue) { objc_setAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem, rawValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC); }
@@ -230,9 +232,20 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
         NSString *selectedText = [[UIPasteboard generalPasteboard].string copy];
         if (selectedText) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-            UIAlertAction *clapaction = [UIAlertAction actionWithTitle:@"👏" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [[UIPasteboard generalPasteboard] setString:clap(selectedText)];
-                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+            UIAlertAction *clapaction = [UIAlertAction actionWithTitle:@"Choose Emoji" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Choose Emoji" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                  textField.text = @"👏";
+                }];
+                UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                  emojichosen = [[alertController textFields][0] text];
+                  [[UIPasteboard generalPasteboard] setString:clap(selectedText)];
+                  [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+                }];
+                [alertController addAction:confirmAction];
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}];
+                [alertController addAction:cancelAction];
+                [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:^{}];
 
               }];
             [alertController addAction:clapaction];
@@ -282,7 +295,7 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_a1a39fbd(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_60b1dd2a(int __unused argc, char __unused **argv, char __unused **envp) {
     
     
     bool shouldLoad = NO;
