@@ -1,3 +1,6 @@
+//THIS WHOLE TWEAK IS BASED ON SELECTOWO MADE BY NEPETA. MOST OF THE SOURCE CODE WAS MADE BY HER
+//CREDIT TO NEPETADEV.
+
 
 @interface UICalloutBar : UIView
 @property (nonatomic,readonly) bool isDisplayingVertically;
@@ -207,6 +210,7 @@ NSString *lmgtfy (NSString *texttochange) {
         if (selectedText) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             UIAlertAction *clapaction = [UIAlertAction actionWithTitle:@"Choose Emoji" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+              UITextField *textFieldAlert;
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Choose Emoji" message:nil preferredStyle:UIAlertControllerStyleAlert];
                 [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
                   textField.text = @"👏";

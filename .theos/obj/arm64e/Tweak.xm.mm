@@ -180,7 +180,7 @@ NSString *lmgtfy (NSString *texttochange) {
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class UIResponder; @class UICalloutBar; 
+@class UICalloutBar; @class UIResponder; 
 
 
 #line 161 "Tweak.xm"
@@ -233,6 +233,7 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
         if (selectedText) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"How do you wanna mess with this kid?" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             UIAlertAction *clapaction = [UIAlertAction actionWithTitle:@"Choose Emoji" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+              UITextField *textFieldAlert;
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Choose Emoji" message:nil preferredStyle:UIAlertControllerStyleAlert];
                 [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
                   textField.text = @"👏";
@@ -289,13 +290,14 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
             }
         });
     });
+    [[[UIApplication sharedApplication] keyWindow].rootViewController.view endEditing:YES];
 }
 
 
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_60b1dd2a(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_a9eef49c(int __unused argc, char __unused **argv, char __unused **envp) {
     
     
     bool shouldLoad = NO;
