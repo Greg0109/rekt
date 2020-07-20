@@ -161,6 +161,23 @@ NSString *lmgtfy (NSString *texttochange) {
     return [NSString stringWithFormat:@"http://www.lmgtfy.com/?iie=1&q=%@", fix];
 }
 
+NSString *revert (NSString *texttochange) {
+  NSString *temp = [texttochange copy];
+  NSMutableArray *textArray = [[NSMutableArray alloc] init];
+  for (int i = 0; i < temp.length; i++) {
+    NSString *character = [temp substringWithRange:NSMakeRange(i, 1)];
+    [textArray addObject:character];
+  }
+  int i = 0;
+  int j = [textArray count] - 1;
+  while (i < j) {
+    [textArray exchangeObjectAtIndex:i withObjectAtIndex:j];
+    i++;
+    j--;
+  }
+  return [textArray componentsJoinedByString:@""];
+}
+
 %group SelectRekt
 %hook UICalloutBar
 %property (nonatomic, retain) UIMenuItem *rektItem;
@@ -252,6 +269,12 @@ NSString *lmgtfy (NSString *texttochange) {
                 [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
               }];
               [alertController addAction:spaceAction];
+
+              UIAlertAction *revertAction = [UIAlertAction actionWithTitle:@"trever" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIPasteboard generalPasteboard] setString:revert(selectedText)];
+                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+              }];
+              [alertController addAction:revertAction];
 
               UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
               }];

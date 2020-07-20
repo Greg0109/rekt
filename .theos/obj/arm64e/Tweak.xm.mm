@@ -1,5 +1,8 @@
 #line 1 "Tweak.xm"
 
+
+
+
 @interface UICalloutBar : UIView
 @property (nonatomic,readonly) bool isDisplayingVertically;
 @property (nonatomic, retain) NSArray *extraItems;
@@ -159,6 +162,23 @@ NSString *lmgtfy (NSString *texttochange) {
     return [NSString stringWithFormat:@"http://www.lmgtfy.com/?iie=1&q=%@", fix];
 }
 
+NSString *revert (NSString *texttochange) {
+  NSString *temp = [texttochange copy];
+  NSMutableArray *textArray = [[NSMutableArray alloc] init];
+  for (int i = 0; i < temp.length; i++) {
+    NSString *character = [temp substringWithRange:NSMakeRange(i, 1)];
+    [textArray addObject:character];
+  }
+  int i = 0;
+  int j = [textArray count] - 1;
+  while (i < j) {
+    [textArray exchangeObjectAtIndex:i withObjectAtIndex:j];
+    i++;
+    j--;
+  }
+  return [textArray componentsJoinedByString:@""];
+}
+
 
 #include <substrate.h>
 #if defined(__clang__)
@@ -180,10 +200,10 @@ NSString *lmgtfy (NSString *texttochange) {
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class UICalloutBar; @class UIResponder; 
+@class UIResponder; @class UICalloutBar; 
 
 
-#line 161 "Tweak.xm"
+#line 181 "Tweak.xm"
 static UICalloutBar* (*_logos_orig$SelectRekt$UICalloutBar$initWithFrame$)(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static UICalloutBar* _logos_method$SelectRekt$UICalloutBar$initWithFrame$(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static void (*_logos_orig$SelectRekt$UICalloutBar$updateAvailableButtons)(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UICalloutBar$updateAvailableButtons(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_NORMAL UIResponder* _LOGOS_SELF_CONST, SEL, UIResponder *); 
 
 __attribute__((used)) static UIMenuItem * _logos_method$SelectRekt$UICalloutBar$rektItem(UICalloutBar * __unused self, SEL __unused _cmd) { return (UIMenuItem *)objc_getAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem); }; __attribute__((used)) static void _logos_method$SelectRekt$UICalloutBar$setRektItem(UICalloutBar * __unused self, SEL __unused _cmd, UIMenuItem * rawValue) { objc_setAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem, rawValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC); }
@@ -276,6 +296,12 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
               }];
               [alertController addAction:spaceAction];
 
+              UIAlertAction *revertAction = [UIAlertAction actionWithTitle:@"trever" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIPasteboard generalPasteboard] setString:revert(selectedText)];
+                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+              }];
+              [alertController addAction:revertAction];
+
               UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
               }];
               [alertController addAction:cancelAction];
@@ -290,14 +316,13 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
             }
         });
     });
-    [[[UIApplication sharedApplication] keyWindow].rootViewController.view endEditing:YES];
 }
 
 
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_a9eef49c(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_92845753(int __unused argc, char __unused **argv, char __unused **envp) {
     
     
     bool shouldLoad = NO;
