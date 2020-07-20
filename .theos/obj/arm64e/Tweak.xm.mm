@@ -169,11 +169,9 @@ NSString *revert (NSString *texttochange) {
     NSString *character = [temp substringWithRange:NSMakeRange(i, 1)];
     [textArray addObject:character];
   }
-  int i = 0;
   int j = [textArray count] - 1;
-  while (i < j) {
+  for (int i = 0; i < j; i++) {
     [textArray exchangeObjectAtIndex:i withObjectAtIndex:j];
-    i++;
     j--;
   }
   return [textArray componentsJoinedByString:@""];
@@ -200,10 +198,10 @@ NSString *revert (NSString *texttochange) {
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class UIResponder; @class UICalloutBar; 
+@class UICalloutBar; @class UIResponder; 
 
 
-#line 181 "Tweak.xm"
+#line 179 "Tweak.xm"
 static UICalloutBar* (*_logos_orig$SelectRekt$UICalloutBar$initWithFrame$)(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static UICalloutBar* _logos_method$SelectRekt$UICalloutBar$initWithFrame$(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static void (*_logos_orig$SelectRekt$UICalloutBar$updateAvailableButtons)(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UICalloutBar$updateAvailableButtons(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_NORMAL UIResponder* _LOGOS_SELF_CONST, SEL, UIResponder *); 
 
 __attribute__((used)) static UIMenuItem * _logos_method$SelectRekt$UICalloutBar$rektItem(UICalloutBar * __unused self, SEL __unused _cmd) { return (UIMenuItem *)objc_getAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem); }; __attribute__((used)) static void _logos_method$SelectRekt$UICalloutBar$setRektItem(UICalloutBar * __unused self, SEL __unused _cmd, UIMenuItem * rawValue) { objc_setAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem, rawValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC); }
@@ -322,7 +320,7 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_92845753(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_c5ecd458(int __unused argc, char __unused **argv, char __unused **envp) {
     
     
     bool shouldLoad = NO;

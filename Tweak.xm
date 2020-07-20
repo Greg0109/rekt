@@ -168,11 +168,9 @@ NSString *revert (NSString *texttochange) {
     NSString *character = [temp substringWithRange:NSMakeRange(i, 1)];
     [textArray addObject:character];
   }
-  int i = 0;
   int j = [textArray count] - 1;
-  while (i < j) {
+  for (int i = 0; i < j; i++) {
     [textArray exchangeObjectAtIndex:i withObjectAtIndex:j];
-    i++;
     j--;
   }
   return [textArray componentsJoinedByString:@""];
