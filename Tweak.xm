@@ -88,6 +88,25 @@ static NSDictionary *pirateTalk = @{
    @"agreement":@"partie"
 };
 
+static NSDictionary *mimi = @{
+  @"a":@"i",
+  @"e":@"i",
+  @"o":@"i",
+  @"u":@"i"
+};
+
+NSString *mimify (NSString *text) {
+    NSString *temp = [text copy];
+
+    if (mimi) {
+        for (NSString *key in mimi) {
+            temp = [temp stringByReplacingOccurrencesOfString:key withString:mimi[key]];
+        }
+    }
+
+    return [@" " stringByAppendingString:temp];
+}
+
 NSString *piratefy (NSString *text) {
     NSString *temp = [text copy];
     temp = [temp lowercaseString];
@@ -273,6 +292,12 @@ NSString *revert (NSString *texttochange) {
                 [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
               }];
               [alertController addAction:revertAction];
+
+              UIAlertAction *mimiaction = [UIAlertAction actionWithTitle:@"Mimi" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIPasteboard generalPasteboard] setString:mimify(selectedText)];
+                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+              }];
+              [alertController addAction:mimiaction];
 
               UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
               }];
