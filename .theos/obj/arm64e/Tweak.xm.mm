@@ -96,6 +96,38 @@ static NSDictionary *mimi = @{
   @"u":@"i"
 };
 
+static NSDictionary *australiandict = @{
+  @"z":@"z",
+  @"y":@"ʎ",
+  @"x":@"x",
+  @"w":@"ʍ",
+  @"v":@"ʌ",
+  @"u":@"n",
+  @"t":@"ʇ",
+  @"s":@"s",
+  @"r":@"ɹ",
+  @"q":@"b",
+  @"p":@"d",
+  @"o":@"o",
+  @"n":@"u",
+  @"m":@"ɯ",
+  @"l":@"ן",
+  @"k":@"ʞ",
+  @"j":@"ظ",
+  @"i":@"ı",
+  @"h":@"ɥ",
+  @"g":@"b",
+  @"f":@"ɟ",
+  @"e":@"ǝ",
+  @"d":@"p",
+  @"c":@"ɔ",
+  @"b":@"q",
+  @"a":@"ɐ",
+  @",":@"'",
+  @"'":@",",
+  @"?":@"¿"
+};
+
 NSString *mimify (NSString *text) {
     NSString *temp = [text copy];
 
@@ -196,6 +228,19 @@ NSString *revert (NSString *texttochange) {
   return [textArray componentsJoinedByString:@""];
 }
 
+NSString *australianify (NSString *text) {
+    NSString *temp = revert(text);
+    temp = [temp lowercaseString];
+
+    if (australiandict) {
+        for (NSString *key in australiandict) {
+            temp = [temp stringByReplacingOccurrencesOfString:key withString:australiandict[key]];
+        }
+    }
+
+    return [@" " stringByAppendingString:temp];
+}
+
 
 #include <substrate.h>
 #if defined(__clang__)
@@ -217,10 +262,10 @@ NSString *revert (NSString *texttochange) {
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class UICalloutBar; @class UIResponder; 
+@class UIResponder; @class UICalloutBar; 
 
 
-#line 198 "Tweak.xm"
+#line 243 "Tweak.xm"
 static UICalloutBar* (*_logos_orig$SelectRekt$UICalloutBar$initWithFrame$)(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static UICalloutBar* _logos_method$SelectRekt$UICalloutBar$initWithFrame$(_LOGOS_SELF_TYPE_INIT UICalloutBar*, SEL, CGRect) _LOGOS_RETURN_RETAINED; static void (*_logos_orig$SelectRekt$UICalloutBar$updateAvailableButtons)(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UICalloutBar$updateAvailableButtons(_LOGOS_SELF_TYPE_NORMAL UICalloutBar* _LOGOS_SELF_CONST, SEL); static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_NORMAL UIResponder* _LOGOS_SELF_CONST, SEL, UIResponder *); 
 
 __attribute__((used)) static UIMenuItem * _logos_method$SelectRekt$UICalloutBar$rektItem(UICalloutBar * __unused self, SEL __unused _cmd) { return (UIMenuItem *)objc_getAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem); }; __attribute__((used)) static void _logos_method$SelectRekt$UICalloutBar$setRektItem(UICalloutBar * __unused self, SEL __unused _cmd, UIMenuItem * rawValue) { objc_setAssociatedObject(self, (void *)_logos_method$SelectRekt$UICalloutBar$rektItem, rawValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC); }
@@ -325,6 +370,12 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
               }];
               [alertController addAction:mimiaction];
 
+              UIAlertAction *australian = [UIAlertAction actionWithTitle:@"Kangoroo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIPasteboard generalPasteboard] setString:australianify(selectedText)];
+                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+              }];
+              [alertController addAction:australian];
+
               UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
               }];
               [alertController addAction:cancelAction];
@@ -345,7 +396,7 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_b5de9979(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_9042e25b(int __unused argc, char __unused **argv, char __unused **envp) {
     
     
     bool shouldLoad = NO;

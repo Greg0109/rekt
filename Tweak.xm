@@ -95,6 +95,38 @@ static NSDictionary *mimi = @{
   @"u":@"i"
 };
 
+static NSDictionary *australiandict = @{
+  @"z":@"z",
+  @"y":@"ʎ",
+  @"x":@"x",
+  @"w":@"ʍ",
+  @"v":@"ʌ",
+  @"u":@"n",
+  @"t":@"ʇ",
+  @"s":@"s",
+  @"r":@"ɹ",
+  @"q":@"b",
+  @"p":@"d",
+  @"o":@"o",
+  @"n":@"u",
+  @"m":@"ɯ",
+  @"l":@"ן",
+  @"k":@"ʞ",
+  @"j":@"ظ",
+  @"i":@"ı",
+  @"h":@"ɥ",
+  @"g":@"b",
+  @"f":@"ɟ",
+  @"e":@"ǝ",
+  @"d":@"p",
+  @"c":@"ɔ",
+  @"b":@"q",
+  @"a":@"ɐ",
+  @",":@"'",
+  @"'":@",",
+  @"?":@"¿"
+};
+
 NSString *mimify (NSString *text) {
     NSString *temp = [text copy];
 
@@ -193,6 +225,19 @@ NSString *revert (NSString *texttochange) {
     j--;
   }
   return [textArray componentsJoinedByString:@""];
+}
+
+NSString *australianify (NSString *text) {
+    NSString *temp = revert(text);
+    temp = [temp lowercaseString];
+
+    if (australiandict) {
+        for (NSString *key in australiandict) {
+            temp = [temp stringByReplacingOccurrencesOfString:key withString:australiandict[key]];
+        }
+    }
+
+    return [@" " stringByAppendingString:temp];
 }
 
 %group SelectRekt
@@ -298,6 +343,12 @@ NSString *revert (NSString *texttochange) {
                 [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
               }];
               [alertController addAction:mimiaction];
+
+              UIAlertAction *australian = [UIAlertAction actionWithTitle:@"Kangoroo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIPasteboard generalPasteboard] setString:australianify(selectedText)];
+                [[UIApplication sharedApplication] sendAction:@selector(paste:) to:nil from:self forEvent:nil];
+              }];
+              [alertController addAction:australian];
 
               UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
               }];
