@@ -353,7 +353,22 @@ NSString *australianify (NSString *text) {
               UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
               }];
               [alertController addAction:cancelAction];
-              [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:^{}];
+              UIViewController *viewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+              if ( viewController.presentedViewController && !viewController.presentedViewController.isBeingDismissed ) {
+                  viewController = viewController.presentedViewController;
+              }
+
+              NSLayoutConstraint *constraint = [NSLayoutConstraint
+                  constraintWithItem:alertController.view
+                  attribute:NSLayoutAttributeHeight
+                  relatedBy:NSLayoutRelationLessThanOrEqual
+                  toItem:nil
+                  attribute:NSLayoutAttributeNotAnAttribute
+                  multiplier:1
+                  constant:viewController.view.frame.size.height*2.0f];
+
+              [alertController.view addConstraint:constraint];
+              [viewController presentViewController:alertController animated:YES completion:^{}];
         }
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{

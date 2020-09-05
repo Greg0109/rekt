@@ -379,7 +379,22 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
               UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
               }];
               [alertController addAction:cancelAction];
-              [[[UIApplication sharedApplication] keyWindow].rootViewController presentViewController:alertController animated:YES completion:^{}];
+              UIViewController *viewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+              if ( viewController.presentedViewController && !viewController.presentedViewController.isBeingDismissed ) {
+                  viewController = viewController.presentedViewController;
+              }
+
+              NSLayoutConstraint *constraint = [NSLayoutConstraint
+                  constraintWithItem:alertController.view
+                  attribute:NSLayoutAttributeHeight
+                  relatedBy:NSLayoutRelationLessThanOrEqual
+                  toItem:nil
+                  attribute:NSLayoutAttributeNotAnAttribute
+                  multiplier:1
+                  constant:viewController.view.frame.size.height*2.0f];
+
+              [alertController.view addConstraint:constraint];
+              [viewController presentViewController:alertController animated:YES completion:^{}];
         }
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -396,7 +411,7 @@ static void _logos_method$SelectRekt$UIResponder$rektTheText$(_LOGOS_SELF_TYPE_N
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_9042e25b(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_75358053(int __unused argc, char __unused **argv, char __unused **envp) {
     
     
     bool shouldLoad = NO;
